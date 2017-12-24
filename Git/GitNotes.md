@@ -243,7 +243,7 @@ git remote -v: 查看远程仓库（显示更详细的信息）
 
 有个比较不错的开发流程图如下所示：
 
-![Git Flow](https://github.com/JiaoXR/GitNotes/blob/master/GIT%20FLOW.png)
+![Git Flow](https://github.com/JiaoXR/IT-Skill/blob/master/Git/GIT%20FLOW.png)
 
 详细介绍可参考 http://stormzhang.com/git/2014/01/29/git-flow/ 和 http://nvie.com/posts/a-successful-git-branching-model/ 
 

@@ -1,8 +1,8 @@
 # MySQL 小结
 
-##  1 初始操作
+##  1  初始操作
 
-###  1.1 登录&退出
+###  1.1  登录&退出
 
 登录 MySQL：`mysql -u root -p;`
 
@@ -12,23 +12,23 @@
 2. `quit;`
 3. `exit;`
 
-###  1.2 数据库相关操作
+###  1.2  数据库相关操作
 
 查看所有数据库：`SHOW DATABASES;`
 
 创建数据库：`CREATE DATABASES <database_name> [CHARACTER SET utf8]; --可设置编码格式`
 
-修改数据库编码格式：`ALTER DATABASES <table_name> CHARACTER SET = gbk;`
+修改数据库编码格式：`ALTER DATABASES <database_name> CHARACTER SET = gbk;`
 
-查看数据库创建语句：`SHOW CREATE DATABASES <table_name>;`
+查看数据库创建语句：`SHOW CREATE DATABASES <database_name>;`
 
 删除数据库：`DROP DATABASES <database_name>;`
 
 打开某个数据库：`USE <database_name>;`
 
-##  2 数据类型
+##  2  数据类型
 
-###  2.1 整型
+###  2.1  整型
 
 | MySQL 数据类型 | 字节数   |
 | :--------- | ----- |
@@ -38,14 +38,14 @@
 | INT        | 4 个字节 |
 | BIGINT     | 8 个字节 |
 
-###  2.2 浮点型
+###  2.2  浮点型
 
 | MySQL 数据类型     | 含义                                |
 | -------------- | --------------------------------- |
 | FLOAT[(M, D)]  | 单精度浮点数，8 位精度（4 个字节），总共 M 位，D 位小数  |
 | DOUBLE[(M, D)] | 双精度浮点数，16 位精度（8 个字节），总共 M 位，D 位小数 |
 
-###  2.3 日期类型
+###  2.3  日期类型
 
 | MySQL 数据类型 | 字节数  |
 | ---------- | ---- |
@@ -55,7 +55,7 @@
 | DATETIME   | 8    |
 | TIMESTAMP  | 4    |
 
-###  2.4 字符型
+###  2.4  字符型
 
 | MySQL 数据类型                    | 含义                      |
 | ----------------------------- | ----------------------- |
@@ -68,13 +68,13 @@
 | ENUM('value1', 'value2', ...) | 枚举                      |
 | SET('value1', 'value2', ...)  | 集合                      |
 
-##  3. 数据表
+##  3  数据表
 
 查看（可指定）数据库下所有表：`SHOW TABLES [from <database_name>]; --某数据库下的表`
 
-查看表结构：`show columns from <table_name>;` 或者 `desc <table_name>;`
+查看表结构：`SHOW COLUMNS from <table_name>;` 或者 `DESC <table_name>;`
 
-查看建表语句：`show create table <table_name>;`
+查看建表语句：`SHOW CREATE TABLE <table_name>;`
 
 ###  3.1  约束
 
@@ -102,7 +102,7 @@
 
 PS: 外键约束还有一些参照操作，例如 `CASCADE, SET NULL, RESTRICT, NO ACTION` 等，需要时再详查。
 
-###  3.2 修改数据表
+###  3.2  修改数据表
 
 - 修改字段
 
@@ -167,9 +167,9 @@ PS:  `CHANGE` 既可以修改列定义，又可以修改列名称。
 
 PS: 建议尽量不要修改数据列和表的名字（可能会影响到索引和存储过程等）。
 
-### 3.3 记录的操作(CRUD)
+### 3.3  记录的操作(CRUD)
 
-####  3.3.1 插入记录
+####  3.3.1  插入记录
 
 语法：`INSERT [INTO] <table_name> [(<col_name1, col_name2...>)] {VALUES|VALUE} (val1, val2…);`
 
@@ -186,23 +186,23 @@ PS: 建议尽量不要修改数据列和表的名字（可能会影响到索引�
 
 语法：`INSERT [INTO] <table_name1(col_name)> SELECT <col_name> FROM <table_name2>;`
 
-####  3.3.2 更新记录（单表更新）
+####  3.3.2  更新记录（单表更新）
 
 语法：`UPDATE [LOW_PRIORITY][IGNORE] table_reference SET col_name1={expr|DEFAULT} [, col_name2={expr|DEFAULT}]…[WHERE where_condition]`
 
 PS: 省略 WHERE 条件时，所有的记录都将更新。
 
-####  3.3.3 删除记录
+####  3.3.3  删除记录
 
 语法：`DELETE FROM <table_name> [WHERE where_condition];`
 
-####  3.3.4 GROUP BY
+####  3.3.4  GROUP BY
 
 对查询结果进行分组：
 
 语法：`[GROUP BY {col_name|position} [ASC|DESC], …];`
 
-####  3.3.5 HAVING
+####  3.3.5  HAVING
 
 分组条件：
 
@@ -212,13 +212,13 @@ PS: 省略 WHERE 条件时，所有的记录都将更新。
 
 注意：HAVING 中的字段，要么在前面的 SELECT 语句中出现；要么是一个聚合函数（MAX, MIN, AVG, SUM 等，只有一个返回值的函数）。
 
-####  3.3.6 ORDER BY
+####  3.3.6  ORDER BY
 
 对查询结果进行排序（默认升序），
 
 语法：`[ORDER BY {col_name|expr|position} [ASC|DESC], …];`
 
-####  3.3.7 LIMIT
+####  3.3.7  LIMIT
 
 限制查询结果的记录条数
 
@@ -226,9 +226,48 @@ PS: 省略 WHERE 条件时，所有的记录都将更新。
 
 前者为起始位置，后者为记录数量。
 
-##  4. 运算符和函数
+##  4  连接
 
-###  4.1 字符函数
+若要同时查询多个表的数据，就用到了连接（关键字 JOIN）。
+
+连接分为内连接和外连接，其中外连接包括左外连接和右外连接。
+
+- 内连接
+
+内连接：其结果相当于取两张表的交集。示例代码：
+
+```mysql
+-- 其中 employee 和 person 为两个表(这里不再给出建表语句)
+SELECT * FROM employee, person WHERE employee.id = person.id;
+
+-- 下面四个语句都是内连接，其效果与上述语句相同
+SELECT * FROM employee JOIN person ON employee.id = person.id;
+SELECT * FROM employee INNER JOIN person ON employee.id = person.id;
+SELECT * FROM employee CROSS JOIN person ON employee.id = person.id;
+SELECT * FROM employee STRAIGHT_JOIN person ON employee.id = person.id;
+```
+
+- 外连接
+
+左外连接：显示左表的全部内容，以及右表中符合连接条件的记录。
+
+右外链接：显示右表的全部内容，以及左表中符合连接条件的记录。
+
+示例代码：
+
+```mysql
+-- 左表的全部
+SELECT * FROM employee LEFT JOIN person ON employee.id = person.id;
+
+-- 右表的全部
+SELECT * FROM employee RIGHT JOIN person ON employee.id = person.id;
+```
+
+参考：http://www.cnblogs.com/ggjucheng/archive/2012/11/06/2757972.html
+
+##  5  运算符和函数
+
+###  5.1  字符函数
 
 - CONCAT() : 字符串连接。
 - CONCAT_WS() : 使用指定的分隔符进行字符串连接。
@@ -294,7 +333,7 @@ PS: 省略 WHERE 条件时，所有的记录都将更新。
 
 - REPLACE() : 字符串替换。
 
-###  4.2 数值运算符与函数
+###  5.2  数值运算符与函数
 
 - CEIL() : 进一法取整数。
 - FLOOR() : 去尾法取整数。
@@ -304,13 +343,13 @@ PS: 省略 WHERE 条件时，所有的记录都将更新。
 - ROUND() : 四舍五入。
 - TRUNCATE() : 数字截取。
 
-###  4.3 比较运算符与函数
+###  5.3  比较运算符与函数
 
 - [NOT] BETWEEN…AND… : [不]在范围之内。
 - [NOT] IN() : [不]在列出值范围内。
 - IS [NOT] NULL : [不]为空。
 
-###  4.4 日期时间函数
+###  5.4  日期时间函数
 
 - NOW() : 当前日期和时间。
 - CURDATE() : 当前日期。
@@ -321,7 +360,7 @@ PS: 省略 WHERE 条件时，所有的记录都将更新。
 
 把日期转为指定格式，示例代码：`SELECT DATE_FORMAT(NOW(), '%Y%m%d %H:%m:%s’);`
 
-###  4.5 信息函数
+###  5.5  信息函数
 
 - CONNECT_ID() : 连接 ID。
 - DATABASE() : 当前数据库。
@@ -332,7 +371,7 @@ PS: 写入多条记录时，得到写入第一条记录的 ID。
 - USER() : 当前用户。
 - VERSION() : 版本信息。
 
-###  4.6 聚合函数
+###  5.6  聚合函数
 
 - AVG() : 平均值。
 - COUNT() : 计数。
@@ -340,14 +379,14 @@ PS: 写入多条记录时，得到写入第一条记录的 ID。
 - MIN() : 最小值。
 - SUM() : 求和。
 
-###  4.7 加密函数
+###  5.7  加密函数
 
 - MD5() : 信息摘要算法（可用作用户登录密码）。
 - PASSWORD() : 密码算法（一般用于数据库的登录密码）。
 
-##  5. 自定义函数
+##  6  自定义函数
 
-###  5.1 概念
+###  6.1  概念
 
 用户自定义函数（user-defined function, UDF）是对 MySQL 函数的扩展，其用法与内置函数相同。
 
@@ -356,7 +395,7 @@ PS: 写入多条记录时，得到写入第一条记录的 ID。
 1. 参数（可为空）；
 2. 返回值（可为任意类型）。
 
-###  5.2 语法
+###  6.2  语法
 
 - 创建自定义函数
 
@@ -378,7 +417,7 @@ routine_body
 
 语法：`DROP FUNCTION [IF EXISTS] function_name;`
 
-### 5.3 示例代码
+### 6.3  示例代码
 
 定义无参数函数：
 
@@ -395,9 +434,9 @@ RETURNS FLOAT(10,2) UNSIGNED
 RETURN (num1+num2)/2;
 ```
 
-##  6  存储过程
+##  7  存储过程
 
-###  6.1 概念
+###  7.1  概念
 
 存储过程是 SQL 语句和控制语句的预编译集合，以一个名称存储，并作为一个单元处理。
 
@@ -407,9 +446,9 @@ RETURN (num1+num2)/2;
 2. 实现较快的执行速度；
 3. 减少网络流量。
 
-###  6.2 语法&示例代码
+###  7.2  语法&示例代码
 
-####  6.2.1 创建存储过程
+####  7.2.1  创建存储过程
 
 - 语法
 
@@ -446,10 +485,10 @@ END
 PS: 创建存储过程时，一般会先修改 MySQL 的结束标志符。例如：
 
 ```mysql
-delimiter // : -- 将 MySQL 的结束标志改为 //（可自定义）
+DELIMITER // : -- 将 MySQL 的结束标志改为 //（可自定义）
 ```
 
-####  6.2.2 调用存储过程
+####  7.2.2  调用存储过程
 
 - 语法
 
@@ -468,7 +507,7 @@ CALL pro_name(param1, @num);
 
 其中，@ 声明的变量为用户变量（类似全局变量），可用于接收存储过程的返回值，之后用 `SELECT` 查看。
 
-####  6.2.3 删除存储过程
+####  7.2.3  删除存储过程
 
 语法：
 
@@ -476,7 +515,7 @@ CALL pro_name(param1, @num);
 DROP PROCEDURE [IF EXISTS] sp_name;
 ```
 
-###  6.3 存储过程与自定义函数的区别
+###  7.3  存储过程与自定义函数的区别
 
 - 存储过程实现的功能略复杂，而函数的针对性更强；
 - 存储过程可以返回多个值，而函数只能有一个返回值；
@@ -484,9 +523,9 @@ DROP PROCEDURE [IF EXISTS] sp_name;
 
 常用的操作可封装为存储过程（执行效率较高）。
 
-##  7 存储引擎
+##  8  存储引擎
 
-###  7.1 概念
+###  8.1  概念
 
 MySQL 可以将数据以不同的技术存储在文件（内存）中，这种技术称为存储引擎。
 
@@ -494,7 +533,7 @@ MySQL 可以将数据以不同的技术存储在文件（内存）中，这种�
 
 MySQL 支持的存储引擎：MyISAM, InnoDB, Memory, CSV, Archive.
 
-###  7.2 其他相关概念
+###  8.2  其他相关概念
 
 - 并发控制
 
@@ -537,7 +576,7 @@ MySQL 支持的存储引擎：MyISAM, InnoDB, Memory, CSV, Archive.
 
 BlackHole：黑洞索引，写入的数据都会消失，一般用作数据复制的中继。
 
-###  7.3 几种存储引擎的特点
+###  8.3  几种存储引擎的特点
 
 集中存储引擎的特点如下：
 
@@ -554,7 +593,7 @@ MyISAM : 适用于事务处理不多的情况。
 
 InnoDB : 适用于事务处理较多，需要外键支持的情况。
 
-### 7.4 修改存储引擎
+### 8.4  修改存储引擎
 
 1. 修改 MySQL 配置文件
 
@@ -574,21 +613,23 @@ CREATE TABLE <table_name> (
 ALTER TABLE <table_name> ENGINE [=] engine_name;
 ```
 
-##  8 其他
+##  9  其他
 
-###  8.1 规范
+###  9.1  规范
 
 - 关键字与函数名称全部大写；
 - 数据库名称、表名称、字段名称全小写；
 - SQL语句必须以分号结尾。
 
-###  8.2 其他命令
+###  9.2  其他命令
 
-delimiter // : 将 MySQL 的结束标志改为 //（可自定义）
+`DELIMITER //` : 将 MySQL 的结束标志改为 //（可自定义）
 
-查看数据表的索引：`show indexes from <table>[\G]`; —后面加 `’\G’` 表示查询结果以网格形式显示
+查看数据表的索引：`SHOW INDEXES FROM <table>[\G]`; —后面加 `’\G’` 表示查询结果以网格形式显示
 
-查看警告信息：`show warnings;`
+查看警告信息：`SHOW WARNINGS;`
+
+执行 SQL 脚本：`mysql> \. /Users/jaxer/Desktop/test.sql`
 
 
 

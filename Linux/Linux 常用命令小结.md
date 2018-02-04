@@ -235,7 +235,7 @@ man command, 例如（以 wc 命令为例）：
 
 如图所示：
 
-![file1](/Users/jaxer/GitHub-JiaoXR/IT-Skill/pics/Linux/file1.gif)
+![file1](https://github.com/JiaoXR/IT-Skill/blob/master/pics/Linux/file1.gif)
 
 说明：
 

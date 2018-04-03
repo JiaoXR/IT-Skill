@@ -6,5 +6,6 @@ package com.jaxer.example.decorator;
  * @author jaxer
  * date 03/04/2018
  */
-public class Shape {
+public interface Shape {
+    void draw();
 }

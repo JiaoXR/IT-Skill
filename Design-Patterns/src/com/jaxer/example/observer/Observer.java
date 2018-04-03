@@ -6,5 +6,7 @@ package com.jaxer.example.observer;
  * @author jaxer
  * date 03/04/2018
  */
-public class Observer {
+public abstract class Observer {
+    protected Subject subject;
+    abstract void update();
 }

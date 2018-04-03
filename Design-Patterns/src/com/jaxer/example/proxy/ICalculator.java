@@ -6,6 +6,6 @@ package com.jaxer.example.proxy;
  * @author jaxer
  * date 26/02/2018
  */
-public interface ICalcutor {
+public interface ICalculator {
     int add(int a, int b);
 }

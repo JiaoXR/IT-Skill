@@ -1,4 +1,4 @@
-package com.jaxer.example.singleton.lazy2;
+package com.jaxer.example.singleton.lazy;
 
 /**
  * 同步方法下的懒汉 - 可用，不推荐
@@ -9,15 +9,15 @@ package com.jaxer.example.singleton.lazy2;
  * @author jaxer
  * date 24/02/2018
  */
-public class Singleton2 {
-    private static Singleton2 uniqueInstance;
+public class Lazy2 {
+    private static Lazy2 uniqueInstance;
 
-    private Singleton2() {
+    private Lazy2() {
     }
 
-    public static synchronized Singleton2 getInstance() {
+    public static synchronized Lazy2 getInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new Singleton2();
+            uniqueInstance = new Lazy2();
         }
         return uniqueInstance;
     }

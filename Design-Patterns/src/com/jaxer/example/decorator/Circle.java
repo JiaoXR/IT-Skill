@@ -6,5 +6,9 @@ package com.jaxer.example.decorator;
  * @author jaxer
  * date 03/04/2018
  */
-public class Circle {
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Shape: Circle");
+    }
 }

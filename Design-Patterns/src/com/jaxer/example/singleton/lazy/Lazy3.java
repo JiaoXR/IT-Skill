@@ -1,4 +1,4 @@
-package com.jaxer.example.singleton.lazy3;
+package com.jaxer.example.singleton.lazy;
 
 /**
  * 同步代码块下的懒汉 - 不可用
@@ -9,16 +9,16 @@ package com.jaxer.example.singleton.lazy3;
  * @author jaxer
  * date 24/02/2018
  */
-public class Singleton3 {
-    private static Singleton3 uniqueInstance;
+public class Lazy3 {
+    private static Lazy3 uniqueInstance;
 
-    private Singleton3() {
+    private Lazy3() {
     }
 
-    public static Singleton3 getInstance() {
+    public static Lazy3 getInstance() {
         if (uniqueInstance == null) {
-            synchronized (Singleton3.class) {
-                uniqueInstance = new Singleton3();
+            synchronized (Lazy3.class) {
+                uniqueInstance = new Lazy3();
             }
         }
         return uniqueInstance;

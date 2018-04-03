@@ -6,5 +6,10 @@ package com.jaxer.example.proxy;
  * @author jaxer
  * date 26/02/2018
  */
-public class CalculatorImpl {
+public class CalculatorImpl implements ICalculator {
+
+    @Override
+    public int add(int a, int b) {
+        return a + b;
+    }
 }

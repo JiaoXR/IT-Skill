@@ -1,4 +1,4 @@
-package com.jaxer.example.singleton.dcl;
+package com.jaxer.example.singleton.lazy;
 
 /**
  * 双重检查（Double Check）下的懒汉 - 推荐
@@ -9,20 +9,20 @@ package com.jaxer.example.singleton.dcl;
  * @author jaxer
  * date 24/02/2018
  */
-public class Singleton4 {
+public class Lazy4 {
     /**
      * 使用 volatile 关键字的目的不是保证可见性（synchronized 已经保证了可见性），而是为了保证顺序性。
      */
-    private static volatile Singleton4 uniqueInstance;
+    private static volatile Lazy4 uniqueInstance;
 
-    private Singleton4() {
+    private Lazy4() {
     }
 
-    public static Singleton4 getInstance() {
+    public static Lazy4 getInstance() {
         if (uniqueInstance == null) {
-            synchronized (Singleton4.class) {
+            synchronized (Lazy4.class) {
                 if (uniqueInstance == null) {
-                    uniqueInstance = new Singleton4();
+                    uniqueInstance = new Lazy4();
                 }
             }
         }

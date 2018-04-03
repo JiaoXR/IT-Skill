@@ -6,9 +6,9 @@ package com.jaxer.example.observer;
  * @author jaxer
  * date 03/04/2018
  */
-public class HexaObserver extends Observer {
+public class HexObserver extends Observer {
 
-    public HexaObserver(Subject subject) {
+    public HexObserver(Subject subject) {
         this.subject = subject;
         this.subject.add(this);
     }
@@ -16,6 +16,6 @@ public class HexaObserver extends Observer {
     @Override
     void update() {
         System.out.println("Hex String: "
-                + Integer.toOctalString(subject.getState()));
+                + Integer.toHexString(subject.getState()).toUpperCase());
     }
 }

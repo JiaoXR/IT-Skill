@@ -1,4 +1,4 @@
-package com.jaxer.example.singleton.lazy1;
+package com.jaxer.example.singleton.lazy;
 
 /**
  * 懒汉式-1
@@ -8,16 +8,16 @@ package com.jaxer.example.singleton.lazy1;
  * @author jaxer
  * date 24/02/2018
  */
-public class Singleton1 {
+public class Lazy1 {
 
-    private static Singleton1 uniqueInstance;
+    private static Lazy1 uniqueInstance;
 
-    private Singleton1() {
+    private Lazy1() {
     }
 
-    public static Singleton1 getInstance() {
+    public static Lazy1 getInstance() {
         if (uniqueInstance == null) {
-            uniqueInstance = new Singleton1();
+            uniqueInstance = new Lazy1();
         }
         return uniqueInstance;
     }

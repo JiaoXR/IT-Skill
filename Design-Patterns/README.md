@@ -238,9 +238,32 @@
 
 ![](https://github.com/JiaoXR/IT-Skill/blob/master/pics/Design-Patterns/adapter_pattern_uml_diagram.jpg)
 
+---
 
+###  9. 外观模式
 
+外观模式（Facade Pattern）隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。这种类型的设计模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性。
 
+- 意图
+
+为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
+
+类比打开电脑（按一下电源键）：启动 CPU、启动内存、启动硬盘。
+
+####  优缺点
+
+- 优点
+  - 减少系统相互依赖；
+  - 提高灵活性；
+  - 提高安全性。
+- 缺点
+  - 不符合开闭原则，如果要改东西很麻烦，继承重写都不合适。
+
+####  实现
+
+![](https://github.com/JiaoXR/IT-Skill/blob/master/pics/Design-Patterns/facade_pattern_uml_diagram.jpg)
+
+---
 
 
 

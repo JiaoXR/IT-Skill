@@ -6,5 +6,9 @@ package com.jaxer.example.facade;
  * @author jaxer
  * date 07/04/2018
  */
-public class Circle {
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Circle::draw()");
+    }
 }

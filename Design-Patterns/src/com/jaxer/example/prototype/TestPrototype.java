@@ -7,4 +7,16 @@ package com.jaxer.example.prototype;
  * date 10/04/2018
  */
 public class TestPrototype {
+    public static void main(String[] args) {
+        ShapeCache.loadCache();
+
+        Shape shape = ShapeCache.getShape(1);
+        shape.draw();
+
+        shape = ShapeCache.getShape(2);
+        shape.draw();
+
+        shape = ShapeCache.getShape(3);
+        shape.draw();
+    }
 }

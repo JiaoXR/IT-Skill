@@ -8,8 +8,6 @@
 
 索引若未特别指明，都是指 B 树（多路搜索树，并不一定是二叉的）结构组织的索引。其中聚集索引，次要索引，复合索引，前缀索引，唯一索引默认都是 B+ 树索引，通常索引。除了 B+ 树这种类型的索引外，还有哈希索引（hash index）等。
 
-
-
 ###  2. 分类
 
 - 单值索引：即一个索引只包含单个列，一个表可以有多个单值索引。
@@ -62,8 +60,6 @@ DROP INDEX [indexName] ON mytable;
 SHOW INDEX FROM mytable;
 ```
 
-
-
 ###  5. 创建条件
 
 ####  5.1  创建索引条件
@@ -77,12 +73,18 @@ SHOW INDEX FROM mytable;
 ####  5.2  哪些情况不建索引
 
 - 表记录太少（一般 300W 左右开始考虑建索引）；
+
 - 经常增删改的表；
+
 - 数据重复且分布平均的表字段，实际效果不大
 
-​	举例：假如一个表有 10W 条记录，有个字段 A 只有 T 和 F 两种值，且每个值的分布概率大约为 50%，那么对这种表 A 字段建索引一般不会提高数据库的查询速度。
+   举例：假如一个表有 10W 条记录，有个字段 A 只有 T 和 F 两种值，且每个值的分布概率大约为 50%，那么对这种表 A 字段建索引一般不会提高数据库的查询速度。
 
-​	索引的选择性是指索引列中不同值的数目与表中记录数的比。如果一个表中有 2000 条记录，表索引列有 1980 个不同的值，那么这个索引的选择性就是 1980/2000=0.99，一个索引的选择性越接近于 1，这个索引的效率就越高。
+   索引的选择性是指索引列中不同值的数目与表中记录数的比。
+
+   举例：如果一个表中有 2000 条记录，表索引列有 1980 个不同的值，那么这个索引的选择性就是 1980/2000=0.99，一个索引的选择性越接近于 1，这个索引的效率就越高。
+
+
 
 
 
@@ -104,7 +106,7 @@ SHOW INDEX FROM mytable;
 
 1. SIMPLE：简单的 select 查询，不包含子查询或 union；
 2. PRIMARY：查询中若包含任何复杂的子部分，最外层被标记为 PRIMARY；
-3. SUBQUERY：在 select 或 where 列表中包含了子查询；
+3. SUBQUERY：在 select 或 where 列表中包含子查询；
 4. DERIVED：在 from 列表中包含的子查询被标记为 DERIVED（衍生），MySQL 会递归执行这些子查询，把结果放在临时表里。
 5. UNION：若第二个 select 出现在 union 之后，则被标记为 union；若 union 包含在 from 子句的子查询中，外层 select 被标记为 derived；
 6. UNION RESULT：从 union 表获取结果的 select。
@@ -144,4 +146,71 @@ type 显示的访问类型，是较为重要的一个指标，其结果值从最
 6. impossible where：where 子句的值总是 false；
 
 
+
+
+###  7. 排序使用索引
+
+####  7.1  order by 关键字优化
+
+KEY a_b_c(a,b,c)
+
+- order by 能使用最左前缀
+  - ORDER BY a
+  - ORDER BY a, b
+  - ORDER BY a, b, c
+  - ORDER BY a DESC, b DESC, c DESC
+- 若 where 语句使用索引的最左前缀定义为常量，则 order by 能使用索引
+  - WHERE a=const ORDER BY b, c
+  - WHERE a=const AND b=const ORDER BY c
+  - WHERE a=const AND b>const ORDER BY b, c
+- 不能使用索引进行排序
+  - ORDER BY a ASC, b DESC, c DESC  （排序不一致）
+  - WHERE g=const ORDER BY b, c  （丢失 a）
+  - WHERE a=const ORDER BY c  （丢失 b）
+  - WHERE a=const ORDER BY a, d  （d 不是索引的一部分）
+  - WHERE a IN(...) ORDER BY b, c  （多个条件也是范围查询）
+
+####  7.2  group by 关键字优化
+
+1. group by 实质是先排序后进行优化，遵照索引的最佳左前缀原则
+2. 无法使用索引列时，增大 `max_length_for_sort_data` 参数的设置 + 增大 `sort_buffer_size` 参数的设置
+3. where 高于 having，能写在 where 限定的条件，就不要去 having 限定
+
+
+
+###  7. 索引小结
+
+####  7.1  小结  
+
+1. 全值匹配我最爱（即，需要的搜索条件刚好都在索引中）
+2. 最佳左前缀法则：如果索引多列，要遵守最佳左前缀法则。（“带头大哥不能死，中间兄弟不能断”，指的是查询从索引的最左前列开始，并且不跳过索引的中间列）
+
+
+3. 不在索引列上做任何操作（计算、函数、（自动或手动）类型转换等），会导致索引失效而转向全表
+4. 存储引擎不能使用索引中范围条件（`>、<、in、between...and` 等），否则右边的列索引会失效
+5. 尽量使用覆盖索引（只访问索引的查询（索引列和查询列一致）），减少 `select *`
+6. MySQL 在使用不等于（!= 或 <>）时无法使用索引，会导致全表扫描
+7. `is null, is not null` 也无法使用索引
+8. LIKE 以通配符开头（`%abc...` 或 `%abc..%`）时，索引会失效；
+9. 字符串不加单引号索引失效；
+10. 少用 OR，用它来连接时会索引失效。
+
+
+
+####  7.2  例子
+
+假设索引为 `index(a,b,c)`
+
+|                  WHERE 语句                   |          索引是否被用到          |
+| :-------------------------------------------: | :------------------------------: |
+|                   WHERE a=3                   |            Y, 用到 a             |
+|               WHERE a=3 AND b=5               |           Y, 用到 a, b           |
+|           WHERE a=3 AND b=5 AND c=4           |         Y, 用到 a, b, c          |
+| WHERE b=3 或 WHERE b=3 AND c=4 或者 WHERE c=4 |                N                 |
+|               WHERE a=3 AND c=5               | Y, 用到 a, c 不可用，因为 b 中断 |
+|           WHERE a=3 AND b>4 AND c=5           | Y, 用到 a 和 b, c 在范围后，中断 |
+|      WHERE a=3 AND b LIKE 'kk%' AND c=4       |         Y, 用到 a, b, c          |
+|      WHERE a=3 AND b LIKE '%kk' AND c=4       |            Y, 用到 a             |
+|      WHERE a=3 AND b LIKE '%kk%' AND c=4      |            Y, 用到 a             |
+|     WHERE a=3 AND b LIKE 'k%kk%' AND c=4      |         Y, 用到 a, b, c          |
 

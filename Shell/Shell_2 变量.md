@@ -40,6 +40,7 @@ echo ${your_name}
 ```shell
 your_name="tom"
 echo $your_name
+
 your_name="alibaba"
 echo $your_name
 ```
@@ -52,6 +53,7 @@ echo $your_name
 #!/bin/bash
 myUrl="http://www.google.com"
 readonly myUrl
+
 # 再修改时会报错：read-only variable: myUrl
 myUrl="http://www.baidu.com"
  ```
@@ -70,6 +72,7 @@ unset variable_name
 #!/bin/sh
 myUrl="http://www.runoob.com"
 unset myUrl
+
 # 无输出
 echo $myUrl
 ```

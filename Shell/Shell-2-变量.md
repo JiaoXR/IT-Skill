@@ -220,10 +220,11 @@ ${数组名[下标]}
 valuen=${array_name[n]}
  ```
 
-使用 `@` 符号可以获取数组中的所有元素，例如：
+使用 `@` 或 `*` 符号可以获取数组中的所有元素，例如：
 
  ```shell
 echo ${array_name[@]}
+# 或 echo ${array_name[*]}
 value0 value1 value2 value3
  ```
 
@@ -234,8 +235,10 @@ value0 value1 value2 value3
  ```shell
 # 取得数组元素的个数
 length=${#array_name[@]}
+
 # 或者
 length=${#array_name[*]}
+
 # 取得数组单个元素的长度
 lengthn=${#array_name[n]}
  ```
